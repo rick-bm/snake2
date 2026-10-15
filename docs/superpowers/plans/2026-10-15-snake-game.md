@@ -22,6 +22,7 @@
 - 撞墙或撞自身结束；棋盘满格判胜利（并入「已结束」状态展示）。
 - 本任务 Git 只读：所有步骤**禁止**执行 `git add/commit/push` 等写操作，用「验证检查点」代替提交。git 仅允许 `status/log/diff/show` 等只读命令。
 - 本项目无测试框架，验证采用：浏览器手动冒烟 + `node` 对抽取出的脚本做语法检查。
+- 验证环境降级：若执行环境无 `node` 二进制，则语法检查降级为——抽取 `<script>` 内容与 Task 2 代码块拼接为完整 HTML，用 `lightpanda fetch --dump html` 无头加载，确认无致命 JS 报错（无 node 环境已实测：拼接产物可正常加载、无脚本错误）。
 
 ---
 
@@ -38,7 +39,7 @@
 - Create: `index.html`
 
 **Interfaces:**
-- Produces: 常量 `GRID_SIZE, CELL_SIZE, CANVAS_SIZE, MOVE_INTERVAL_MS, INITIAL_LENGTH, COLORS`；全局状态 `snake, direction, directionQueue, food, score, state`；函数 `reset(), spawnFood(), step(), gameOver(), win(), render(), loop(timestamp), roundRect()`
+- Produces: 常量 `GRID_SIZE, CELL_SIZE, CANVAS_SIZE, MOVE_INTERVAL_MS, INITIAL_LENGTH, COLORS`、`State`；全局状态 `snake, direction, directionQueue, food, score, state`；函数 `reset(), spawnFood(), render(), roundRect()`
 
 - [ ] **Step 1: 写入完整 `index.html`（骨架 + 静态渲染）**
 
@@ -361,7 +362,7 @@ Expected: 无输出，退出码 0。
 
 - [ ] **Step 3: 浏览器冒烟**
 
-打开 `index.html`，按方向键。Expected: 蛇开始向右移动；方向键可转向；无法 180° 反向（快按「右→上→左」时，第二步「左」应被忽略，蛇按「右上」轨迹运动）；Space 可暂停/恢复；`hint` 文案随状态切换。
+打开 `index.html`，按方向键。Expected: 蛇开始向右移动；方向键可转向；无法 180° 反向（初始向右时按「左」应被忽略、继续向右；运行中快按「上→下」时「下」应被忽略、保持向上）；Space 可暂停/恢复；`hint` 文案随状态切换。
 
 > Git 只读：不执行 commit。
 
@@ -455,6 +456,11 @@ Expected: 无输出，退出码 0。
 - 方向键（↑↓←→）：移动
 - Space：暂停 / 继续
 - 撞墙或撞自身即结束；结束后按方向键或 `Enter` 重新开始
+
+## 说明
+
+- 单文件零依赖，直接用浏览器打开 `index.html` 即玩。
+- 方向键（↑↓←→）移动；`Space` 暂停 / 继续。
 ```
 
 > Git 只读：不执行 commit。
